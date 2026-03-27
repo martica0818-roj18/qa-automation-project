@@ -50,4 +50,4 @@ describe('Petstore User API - Flujo completo', () => {
 
   })
 
-})
+}) cy.log('Usuario:', username)
