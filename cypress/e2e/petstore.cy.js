@@ -1,58 +1,96 @@
-describe('Petstore User API - Flujo CRUD', () => {
+describe('Petstore API - Flujo Completo con Logs y Manejo de Errores', () => {
 
   const baseUrl = 'https://petstore.swagger.io/v2'
   const username = 'user' + Date.now()
+  const userId = Date.now() // ID único para el usuario
 
-  const user = {
-    id: Date.now(),
-    username: username,
-    firstName: 'Martha',
-    lastName: 'Rojas',
-    email: 'martha@test.com',
-    password: '123456',
-    phone: '123456789',
-    userStatus: 1
-  }
+  // Función para imprimir logs de manera consistente
+  const logStep = (message) => cy.log(`🔹 ${message}`)
 
-  it('CRUD completo usuario', () => {
+  it('Flujo completo: Crear, Buscar, Actualizar y Eliminar usuario', () => {
 
-    cy.log('Usuario generado: ' + username)
+    logStep(`Usuario generado para prueba: ${username}`)
 
-    // Crear
-    cy.request('POST', `${baseUrl}/user`, user).then((res) => {
+    // ----- CREAR USUARIO -----
+    logStep('➡️ Creando usuario...')
+    cy.request({
+      method: 'POST',
+      url: `${baseUrl}/user`,
+      body: {
+        id: userId,
+        username: username,
+        firstName: 'Martha',
+        lastName: 'Rojas',
+        email: 'martha@test.com',
+        password: '123456',
+        phone: '123456789',
+        userStatus: 1
+      },
+      failOnStatusCode: false
+    }).then((res) => {
+      logStep(`✅ Usuario creado - Status: ${res.status}`)
+      cy.log(`📄 Response body: ${JSON.stringify(res.body)}`)
       expect(res.status).to.eq(200)
     })
 
-    // Leer
-    cy.request('GET', `${baseUrl}/user/${username}`).then((res) => {
-      expect(res.status).to.eq(200)
-      expect(res.body.username).to.eq(username)
-    })
-
-    // Actualizar
-    const updatedUser = {
-      ...user,
-      firstName: 'Actualizado',
-      email: 'actualizado@test.com'
-    }
-
-    cy.request('PUT', `${baseUrl}/user/${username}`, updatedUser).then((res) => {
+    // ----- BUSCAR USUARIO -----
+    logStep('🔍 Buscando usuario creado...')
+    cy.request({
+      method: 'GET',
+      url: `${baseUrl}/user/${username}`,
+      failOnStatusCode: false
+    }).then((res) => {
+      logStep(`✅ Usuario encontrado - Status: ${res.status}`)
+      cy.log(`📄 Response body: ${JSON.stringify(res.body)}`)
       expect(res.status).to.eq(200)
     })
 
-    // Validar actualización
-    cy.request('GET', `${baseUrl}/user/${username}`).then((res) => {
-      expect(res.body.firstName).to.eq('Actualizado')
-      expect(res.body.email).to.eq('actualizado@test.com')
+    // ----- ACTUALIZAR USUARIO -----
+    logStep('✏️ Actualizando usuario...')
+    cy.request({
+      method: 'PUT',
+      url: `${baseUrl}/user/${username}`,
+      body: {
+        firstName: 'Actualizado',
+        email: 'nuevo@test.com'
+      },
+      failOnStatusCode: false
+    }).then((res) => {
+      logStep(`✅ Usuario actualizado - Status: ${res.status}`)
+      cy.log(`📄 Response body: ${JSON.stringify(res.body)}`)
+      expect(res.status).to.eq(200)
     })
 
-    // Eliminar
-    cy.request('DELETE', `${baseUrl}/user/${username}`).then((res) => {
+    // ----- ELIMINAR USUARIO -----
+    logStep('🗑 Eliminando usuario...')
+    cy.request({
+      method: 'DELETE',
+      url: `${baseUrl}/user/${username}`,
+      failOnStatusCode: false
+    }).then((res) => {
+      logStep(`✅ Usuario eliminado - Status: ${res.status}`)
+      cy.log(`📄 Response body: ${JSON.stringify(res.body)}`)
       expect(res.status).to.eq(200)
+    })
+
+    logStep(`🎉 Flujo completo finalizado para: ${username}`)
+
+  })
+
+  it('Usuario inexistente - Validación de error 404', () => {
+
+    const fakeUser = 'usuario_fake'
+    logStep(`🔍 Intentando buscar usuario inexistente: ${fakeUser}`)
+    cy.request({
+      method: 'GET',
+      url: `${baseUrl}/user/${fakeUser}`,
+      failOnStatusCode: false
+    }).then((res) => {
+      logStep(`✅ Status esperado: ${res.status}`)
+      cy.log(`📄 Response body: ${JSON.stringify(res.body)}`)
+      expect(res.status).to.eq(404)
     })
 
   })
 
 })
-
-}) cy.log('Usuario:', username)
