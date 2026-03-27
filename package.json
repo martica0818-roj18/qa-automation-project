@@ -1,1 +1,11 @@
-
+{
+  "name": "qa-automation-project",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "cypress open",
+    "run": "cypress run"
+  },
+  "devDependencies": {
+    "cypress": "^13.0.0"
+  }
+}
