@@ -6,3 +6,4 @@ describe('API Test', () => {
       })
   })
 })
+expect(response.body).to.have.length.greaterThan(0)
