@@ -7,17 +7,27 @@ Martha Liliana Rojas
 - Cypress
 - JavaScript
 
-## 📌 Alcance
-- Pruebas E2E
-- Pruebas API
+## 📌 Alcance del proyecto
+Este proyecto implementa pruebas automatizadas:
+- Pruebas E2E (End to End)
+- Pruebas de API
 
 ## ▶️ Ejecución
-npm install
-npx cypress open
+1. Instalar dependencias:
+   npm install
+
+2. Ejecutar pruebas:
+   npx cypress open
 
 ## 📊 Casos cubiertos
 - Validación de página web
-- Consumo de API
+- Consumo de API (GET users)
 
-## 🧠 Observaciones
-Proyecto base de automatización enfocado en QA testing.
+## 🧠 Hallazgos
+- API responde correctamente (200)
+- Flujo básico validado
+
+## 🚀 Mejoras futuras
+- Implementar pruebas negativas
+- Agregar Page Object Model
+- Integrar CI/CD
