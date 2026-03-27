@@ -1,10 +1,10 @@
 HALLAZGOS:
 
-- Prueba E2E implementada correctamente
+- Pruebas E2E implementadas correctamente
 - API responde con estado 200
 
 MEJORAS:
 
-- Agregar pruebas negativas
+- Agregar validaciones negativas
 - Implementar login real
 - Integrar reportes
